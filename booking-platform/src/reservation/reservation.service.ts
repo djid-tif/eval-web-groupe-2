@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Reservation, ReservationStatus } from './reservation.entity';
+import {CreateReservationDto} from "./dto/create-reservation.dto";
 
 @Injectable()
 export class ReservationService {
@@ -25,9 +26,14 @@ export class ReservationService {
         return reservation;
     }
 
-    async create(data: Partial<Reservation>): Promise<Reservation> {
-        const reservation = this.reservationRepository.create(data);
-        return this.reservationRepository.save(reservation);
+    async create(data: CreateReservationDto): Promise<Reservation> {
+        const reservation = this.reservationRepository.create({
+            ...data,
+            start_time: new Date(data.start_time),
+            end_time: new Date(data.end_time),
+        });
+
+        return await this.reservationRepository.save(reservation);
     }
 
     async updateStatus(id: number, status: ReservationStatus): Promise<Reservation> {

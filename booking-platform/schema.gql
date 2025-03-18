@@ -45,7 +45,7 @@ type Mutation {
   createRoom(name: String!, capacity: Int!, location: String): Room!
   updateRoom(id: Int!, name: String, capacity: Int, location: String): Room!
   deleteRoom(id: Int!): Boolean!
-  createReservation(user_id: Int!, room_id: Int!, start_time: DateTime!, end_time: DateTime!): Reservation!
+  createReservation(user_id: Int!, room_id: Int!, start_time: String!, end_time: String!): Reservation!
   updateReservationStatus(id: Int!, status: String!): Reservation!
   createUser(keycloak_id: String!, email: String): User!
 }

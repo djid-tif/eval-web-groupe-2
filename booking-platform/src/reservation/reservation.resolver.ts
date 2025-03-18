@@ -3,6 +3,8 @@ import { ReservationService } from './reservation.service';
 import { Reservation, ReservationStatus } from './reservation.entity';
 import { UserService } from '../user/user.service';
 import { RoomService } from '../room/room.service';
+import { JwtAuthGuard } from "../auth/auth.guard";
+import { UseGuards } from "@nestjs/common";
 
 @Resolver(() => Reservation)
 export class ReservationResolver {
@@ -12,6 +14,7 @@ export class ReservationResolver {
         private readonly roomService: RoomService,
     ) {}
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => [Reservation])
     async listReservations(
         @Args('skip', { type: () => Int, nullable: true }) skip = 0,
@@ -20,17 +23,19 @@ export class ReservationResolver {
         return this.reservationService.findAll(skip, limit);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Query(() => Reservation)
     async reservation(@Args('id', { type: () => Int }) id: number): Promise<Reservation> {
         return this.reservationService.findOne(id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Reservation)
     async createReservation(
         @Args('user_id', { type: () => Int }) user_id: number,
         @Args('room_id', { type: () => Int }) room_id: number,
-        @Args('start_time') start_time: Date,
-        @Args('end_time') end_time: Date,
+        @Args('start_time') start_time: string,
+        @Args('end_time') end_time: string,
     ): Promise<Reservation> {
         const user = await this.userService.findOne(user_id);
         if (!user) throw new Error('User not found');
@@ -38,9 +43,10 @@ export class ReservationResolver {
         const room = await this.roomService.findOne(room_id);
         if (!room) throw new Error('Room not found');
 
-        return this.reservationService.create({ user, room, start_time, end_time });
+        return this.reservationService.create({ user_id, room_id, start_time, end_time });
     }
 
+    @UseGuards(JwtAuthGuard)
     @Mutation(() => Reservation)
     async updateReservationStatus(
         @Args('id', { type: () => Int }) id: number,

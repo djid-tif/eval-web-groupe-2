@@ -29,7 +29,7 @@ const KcAdminClient = require('keycloak-admin').default;
             lastName: 'User',
             password: 'password',
         }
-        ];
+    ];
 
     // Configure the client
     kcAdminClient.setConfig({
@@ -87,7 +87,7 @@ const KcAdminClient = require('keycloak-admin').default;
     const usersCreated = []
     // Create the user
     for(const user of users){
-       const u = await kcAdminClient.users.create({
+        const u = await kcAdminClient.users.create({
             username: user.username,
             email: user.email,
             firstName: user.firstName,

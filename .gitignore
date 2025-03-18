@@ -16,7 +16,7 @@ pnpm-debug.log*
 *.swo
 
 # Environnement
-.env
+booking-platform/.env
 .env.local
 .env.development
 .env.production
