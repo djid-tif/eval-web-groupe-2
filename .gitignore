@@ -1,0 +1,31 @@
+# Node.js
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE / Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environnement
+.env
+.env.local
+.env.development
+.env.production
+
+# Logs
+logs/
+*.log
+yarn.lock
+
+# Docker
+docker-compose.override.yml
+docker-data/
