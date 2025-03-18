@@ -8,6 +8,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 @Module({
   imports: [TypeOrmModule.forFeature([Room])],
   providers: [RoomService, RoomResolver],
-  controllers: [RoomController]
+  controllers: [RoomController],
+  exports: [RoomService],
 })
 export class RoomModule {}

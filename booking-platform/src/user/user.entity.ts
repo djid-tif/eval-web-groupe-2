@@ -1,24 +1,21 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Unique } from 'typeorm';
 
 @ObjectType()
-@Entity({ name: 'rooms' })
-export class Room {
+@Entity({ name: 'users' })
+@Unique(['keycloak_id'])
+export class User {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
     id: number;
 
     @Field()
-    @Column({ type: 'varchar', length: 100 })
-    name: string;
-
-    @Field(() => Int)
-    @Column({ type: 'int', nullable: false, default: 0 })
-    capacity: number;
+    @Column({ type: 'uuid', unique: true })
+    keycloak_id: string;
 
     @Field({ nullable: true })
     @Column({ type: 'varchar', length: 255, nullable: true })
-    location?: string;
+    email?: string;
 
     @Field()
     @CreateDateColumn({ type: 'timestamp' })

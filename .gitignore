@@ -29,3 +29,6 @@ yarn.lock
 # Docker
 docker-compose.override.yml
 docker-data/
+
+#export
+exports/
