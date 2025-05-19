@@ -9,25 +9,32 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "^1.13.0",
-    "@grpc/proto-loader": "^0.7.13",
+    "@grpc/grpc-js": "^1.13.3",
+    "@grpc/proto-loader": "^0.7.15",
     "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.1.1",
+    "@nestjs/microservices": "^11.1.1",
     "@nestjs/passport": "^11.0.5",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
     "axios": "^1.8.3",
+    "class-validator": "^0.14.2",
     "cookie-parser": "^1.4.6",
     "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
     "keycloak-admin": "^1.14.22",
     "minio": "^8.0.5",
     "node-fetch": "^3.3.2",
+    "passport-jwt": "^4.0.1",
     "pg": "^8.14.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",
     "supertest": "^7.0.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
