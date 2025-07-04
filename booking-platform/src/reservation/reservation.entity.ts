@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Room } from '../room/room.entity';
@@ -13,9 +13,18 @@ export enum ReservationStatus {
 @ObjectType()
 @Entity({ name: 'reservations' })
 export class Reservation {
-    @Field(() => Int)
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Field(() => Int)
+    @Column({ name: 'user_id' })
+    user_id: number;
+    
+
+    @Field(() => Int)
+    @Column({ name: 'room_id' })
+    room_id: number;
 
     @ManyToOne(() => User, { eager: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })

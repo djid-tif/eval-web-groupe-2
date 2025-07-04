@@ -8,11 +8,16 @@ import { RoomModule } from './room/room.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { NotificationModule } from './notification/notification.module';
 import { JwtStrategy } from './auth/jwt-strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import {User} from "./user/user.entity";
+<<<<<<< HEAD
+import { Notification } from './notification/notification.entity';
+=======
 import {ExtractsModule} from "./extract/extract.module";
 import {MinioModule} from "./minio/minio.module";
+>>>>>>> origin/main
 
 @Module({
   imports: [
@@ -23,7 +28,7 @@ import {MinioModule} from "./minio/minio.module";
       username: 'pguser',
       password: 'pgpass',
       database: 'pgdb',
-      entities: [User],
+      entities: [User, Notification],
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -37,8 +42,12 @@ import {MinioModule} from "./minio/minio.module";
     ReservationModule,
     UserModule,
     AuthModule,
+<<<<<<< HEAD
+    NotificationModule,
+=======
     ExtractsModule,
     MinioModule,
+>>>>>>> origin/main
   ],
   providers: [
     JwtStrategy,

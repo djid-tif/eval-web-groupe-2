@@ -4,11 +4,17 @@ import { Reservation } from './reservation.entity';
 import { ReservationService } from './reservation.service';
 import { ReservationController } from './reservation.controller';
 import { ReservationResolver } from './reservation.resolver';
-import {UserModule} from "../user/user.module";
-import {RoomModule} from "../room/room.module";
+import { NotificationModule } from '../notification/notification.module';
+import { UserModule } from '../user/user.module';
+import { RoomModule } from '../room/room.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reservation]), UserModule, RoomModule],
+  imports: [
+    TypeOrmModule.forFeature([Reservation]),
+    NotificationModule,
+    UserModule,
+    RoomModule
+  ],
   providers: [ReservationService, ReservationResolver],
   controllers: [ReservationController],
   exports: [ReservationService],

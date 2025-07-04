@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Query, Body, ParseIntPipe, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Query, Body, ParseIntPipe, BadRequestException, HttpCode } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,9 +15,12 @@ export class UserController {
     @ApiResponse({ status: 200, description: 'List of users', type: [UserResponseDto] })
     @Get()
     async getUsers(
-        @Query('skip', ParseIntPipe) skip = 0,
-        @Query('limit', ParseIntPipe) limit = 10,
+        @Query('skip') skipParam?: string,
+        @Query('limit') limitParam?: string,
     ): Promise<{ users: UserResponseDto[] }> {
+        const skip = skipParam ? parseInt(skipParam, 10) : 0;
+        const limit = limitParam ? parseInt(limitParam, 10) : 10;
+        
         if (skip < 0 || limit <= 0) {
             throw new BadRequestException('Skip and limit must be positive numbers');
         }
@@ -45,8 +48,9 @@ export class UserController {
 
     @ApiOperation({ summary: 'Generate user reservation extract as CSV' })
     @ApiParam({ name: 'id', type: Number, description: 'User ID' })
-    @ApiResponse({ status: 200, description: 'CSV file generated', schema: { example: { url: 'https://example.com/file.csv' } } })
-    @Put(':id/extract')
+    @ApiResponse({ status: 201, description: 'CSV file generated', schema: { example: { url: 'https://example.com/file.csv' } } })
+    @HttpCode(201)
+    @Post(':id/extract')
     async extractUserReservations(@Param('id', ParseIntPipe) id: number): Promise<{ url: string }> {
         const url = await this.userService.generateCSVExtract(id);
         return { url };

@@ -1,7 +1,6 @@
-require('dotenv').config();          // Charge les variables d'environnement
+require('dotenv').config();
 const { Pool } = require('pg');
 
-// Configuration Postgres
 let pool;
 
 module.exports = {
@@ -11,7 +10,7 @@ module.exports = {
                 host: process.env.DB_HOST || 'localhost',
                 database: process.env.DB_NAME || 'pgdb',
                 user: process.env.DB_USER || 'pguser',
-                password: process.env.DB_PASS || 'admin',
+                password: process.env.DB_PASS || 'pgpass',
                 port: Number(process.env.DB_PORT) || 5432,
             });
         }

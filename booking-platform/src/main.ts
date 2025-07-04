@@ -2,13 +2,21 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
+<<<<<<< HEAD
+import { NestExpressApplication } from '@nestjs/platform-express';
+=======
 import {MicroserviceOptions, Transport} from "@nestjs/microservices";
+>>>>>>> origin/main
 import { join } from 'path';
 
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(join(__dirname, '..', '..', 'exports'), {
+    prefix: '/exports/',
+  });
 
   const config = new DocumentBuilder()
       .setTitle('Booking API')

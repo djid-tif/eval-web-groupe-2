@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
 import { RoomService } from './room.service';
 import { Room } from './room.entity';
 
@@ -15,7 +15,7 @@ export class RoomResolver {
     }
 
     @Query(() => Room)
-    async room(@Args('id', { type: () => Int }) id: number): Promise<Room> {
+    async room(@Args('id', { type: () => ID }) id: number): Promise<Room> {
         return this.roomService.findOne(id);
     }
 
@@ -30,7 +30,7 @@ export class RoomResolver {
 
     @Mutation(() => Room)
     async updateRoom(
-        @Args('id', { type: () => Int }) id: number,
+        @Args('id', { type: () => ID }) id: number,
         @Args('name', { nullable: true }) name?: string,
         @Args('capacity', { type: () => Int, nullable: true }) capacity?: number,
         @Args('location', { nullable: true }) location?: string,
@@ -39,7 +39,7 @@ export class RoomResolver {
     }
 
     @Mutation(() => Boolean)
-    async deleteRoom(@Args('id', { type: () => Int }) id: number): Promise<boolean> {
+    async deleteRoom(@Args('id', { type: () => ID }) id: number): Promise<boolean> {
         await this.roomService.delete(id);
         return true;
     }

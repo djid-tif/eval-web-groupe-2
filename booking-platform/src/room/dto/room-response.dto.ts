@@ -15,13 +15,13 @@ export class RoomResponseDto {
     location?: string;
 
     @ApiProperty({ example: '2024-03-18T12:00:00.000Z', description: 'Creation date of the room' })
-    created_at: string;
+    createdAt: string;
 
     constructor(room: Room) {
         this.id = room.id;
         this.name = room.name;
         this.capacity = room.capacity;
         this.location = room.location;
-        this.created_at = room.created_at.toISOString();
+        this.createdAt = room.created_at.toISOString();
     }
 }
