@@ -15,6 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
     ) {
+        console.log(process.env.KEYCLOAK_URL);
+        console.log(process.env.KEYCLOAK_REALM);
+
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
@@ -28,12 +31,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
-        const user = await this.userRepository.findOne({
+        let user = await this.userRepository.findOne({
             where: { keycloak_id: payload.sub },
         });
 
         if (!user) {
-            throw new UnauthorizedException('User not found');
+            user = this.userRepository.create({
+                keycloak_id: payload.sub,
+                email: payload.email || payload.preferred_username,
+            });
+            user = await this.userRepository.save(user);
         }
 
         return {
