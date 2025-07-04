@@ -4,7 +4,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { APP_GUARD } from '@nestjs/core';
-
 import { RoomModule } from './room/room.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UserModule } from './user/user.module';
@@ -13,7 +12,12 @@ import { NotificationModule } from './notification/notification.module';
 import { JwtStrategy } from './auth/jwt-strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import {User} from "./user/user.entity";
+<<<<<<< HEAD
 import { Notification } from './notification/notification.entity';
+=======
+import {ExtractsModule} from "./extract/extract.module";
+import {MinioModule} from "./minio/minio.module";
+>>>>>>> origin/main
 
 @Module({
   imports: [
@@ -38,7 +42,12 @@ import { Notification } from './notification/notification.entity';
     ReservationModule,
     UserModule,
     AuthModule,
+<<<<<<< HEAD
     NotificationModule,
+=======
+    ExtractsModule,
+    MinioModule,
+>>>>>>> origin/main
   ],
   providers: [
     JwtStrategy,
