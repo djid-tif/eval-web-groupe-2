@@ -1,5 +1,5 @@
 import {
-    Controller, Get, Post, Put, Param, Query, Body, ParseIntPipe, BadRequestException
+    Controller, Get, Post, Put, Delete, Param, Query, Body, ParseIntPipe, BadRequestException, HttpCode
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { ReservationService } from './reservation.service';
@@ -19,14 +19,17 @@ export class ReservationController {
     @ApiResponse({ status: 200, description: 'List of reservations', type: [ReservationResponseDto] })
     @Get()
     async getReservations(
-        @Query('skip', ParseIntPipe) skip = 0,
-        @Query('limit', ParseIntPipe) limit = 10,
-    ): Promise<{ reservations: ReservationResponseDto[] }> {
+        @Query('skip') skipParam?: string,
+        @Query('limit') limitParam?: string,
+    ): Promise<ReservationResponseDto[]> {
+        const skip = skipParam ? parseInt(skipParam, 10) : 0;
+        const limit = limitParam ? parseInt(limitParam, 10) : 10;
+        
         if (skip < 0 || limit <= 0) {
             throw new BadRequestException('Skip and limit must be positive numbers');
         }
         const reservations = await this.reservationService.findAll(skip, limit);
-        return { reservations: reservations.map(reservation => new ReservationResponseDto(reservation)) };
+        return reservations.map(reservation => new ReservationResponseDto(reservation));
     }
 
     @ApiOperation({ summary: 'Get a reservation by ID' })
@@ -47,12 +50,31 @@ export class ReservationController {
         return new ReservationResponseDto(reservation);
     }
 
+    @ApiOperation({ summary: 'Update reservation details' })
+    @ApiParam({ name: 'id', type: Number, description: 'Reservation ID' })
+    @ApiResponse({ status: 200, description: 'Reservation updated', type: ReservationResponseDto })
+    @Put(':id')
+    async updateReservation(@Param('id', ParseIntPipe) id: number, @Body() data: any): Promise<ReservationResponseDto> {
+        const reservation = await this.reservationService.update(id, data);
+        return new ReservationResponseDto(reservation);
+    }
+
     @ApiOperation({ summary: 'Update reservation status' })
     @ApiParam({ name: 'id', type: Number, description: 'Reservation ID' })
     @ApiResponse({ status: 200, description: 'Reservation updated', type: ReservationResponseDto })
     @Put(':id/status')
-    async updateReservation(@Param('id', ParseIntPipe) id: number, @Body() data: UpdateReservationDto): Promise<ReservationResponseDto> {
+    async updateReservationStatus(@Param('id', ParseIntPipe) id: number, @Body() data: UpdateReservationDto): Promise<ReservationResponseDto> {
         const reservation = await this.reservationService.updateStatus(id, data.status);
         return new ReservationResponseDto(reservation);
+    }
+
+    @ApiOperation({ summary: 'Delete a reservation' })
+    @ApiParam({ name: 'id', type: Number, description: 'Reservation ID' })
+    @ApiResponse({ status: 204, description: 'Reservation deleted' })
+    @ApiResponse({ status: 404, description: 'Reservation not found' })
+    @HttpCode(204)
+    @Delete(':id')
+    async deleteReservation(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        await this.reservationService.delete(id);
     }
 }

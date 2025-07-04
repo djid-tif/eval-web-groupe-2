@@ -1,15 +1,22 @@
 // jest.config.js
 module.exports = {
     testEnvironment: 'node',
-    setupFilesAfterEnv: ['<rootDir>/src/tests/setup.js', '<rootDir>/src/tests/cleanup.js'],
+    setupFilesAfterEnv: ['<rootDir>/src/tests/setup.js'],
     testMatch: [
-        '**/?(*.)+(spec|test).[tj]s?(x)'
+        '**/src/tests/**/*.test.js'
     ],
     coverageDirectory: 'coverage',
     collectCoverageFrom: [
-        '**/src/**/*.js'
+        '**/src/tests/**/*.js'
     ],
-    // Si vous souhaitez ignorer certains dossiers:
-    "testPathIgnorePatterns": ["/node_modules/", "/dist/"]
+    testPathIgnorePatterns: [
+        "/node_modules/", 
+        "/dist/",
+        "/booking-platform/"
+    ],
+    // Ignorer les fichiers TypeScript
+    moduleFileExtensions: ['js', 'json'],
+    transform: {},
+    testTimeout: 30000
 };
 

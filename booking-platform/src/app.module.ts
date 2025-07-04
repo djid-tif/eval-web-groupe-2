@@ -9,9 +9,11 @@ import { RoomModule } from './room/room.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { NotificationModule } from './notification/notification.module';
 import { JwtStrategy } from './auth/jwt-strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import {User} from "./user/user.entity";
+import { Notification } from './notification/notification.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import {User} from "./user/user.entity";
       username: 'pguser',
       password: 'pgpass',
       database: 'pgdb',
-      entities: [User],
+      entities: [User, Notification],
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -36,6 +38,7 @@ import {User} from "./user/user.entity";
     ReservationModule,
     UserModule,
     AuthModule,
+    NotificationModule,
   ],
   providers: [
     JwtStrategy,

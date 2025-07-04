@@ -1,5 +1,5 @@
 import {
-    Controller, Get, Post, Put, Param, Query, Body, ParseIntPipe, BadRequestException, UseGuards
+    Controller, Get, Post, Put, Delete, Param, Query, Body, ParseIntPipe, BadRequestException, UseGuards, HttpCode
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { RoomService } from './room.service';
@@ -59,5 +59,15 @@ export class RoomController {
     async updateRoom(@Param('id', ParseIntPipe) id: number, @Body() data: UpdateRoomDto): Promise<RoomResponseDto> {
         const room = await this.roomService.update(id, data);
         return new RoomResponseDto(room);
+    }
+
+    @ApiOperation({ summary: 'Delete a room' })
+    @ApiParam({ name: 'id', type: Number, description: 'Room ID' })
+    @ApiResponse({ status: 204, description: 'Room deleted' })
+    @ApiResponse({ status: 404, description: 'Room not found' })
+    @HttpCode(204)
+    @Delete(':id')
+    async deleteRoom(@Param('id', ParseIntPipe) id: number): Promise<void> {
+        await this.roomService.delete(id);
     }
 }

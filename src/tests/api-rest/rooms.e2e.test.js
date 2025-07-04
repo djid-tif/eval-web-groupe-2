@@ -7,7 +7,7 @@
  */
 
 const axios = require('axios');
-const { getToken } = require('../setup');
+const { getUsrToken } = require('../setup');
 
 const BASE_URL = process.env.API_REST_URL || 'http://localhost:3000';
 
@@ -17,7 +17,9 @@ describe('Rooms E2E Tests', () => {
 
     beforeAll(() => {
         // Récupère le token Keycloak initialisé par setupKeycloak.js
-        token = getToken();
+        token = getUsrToken();
+
+        console.log(`Using token: ${token}`); // Pour débogage
     });
 
     it('should create a new room', async () => {
@@ -34,6 +36,9 @@ describe('Rooms E2E Tests', () => {
                 }
             }
         );
+
+        console.log(`Using token: ${token}`); // Pour débogage
+        console.log(`Response data: ${JSON.stringify(response.data)}`); // Pour débogage
 
         expect(response.status).toBe(201);
         expect(response.data).toHaveProperty('id');
