@@ -5,7 +5,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 
 @ApiTags('Users')
-@ApiBearerAuth()
 @Controller('api/users')
 export class UserController {
     constructor(private readonly userService: UserService) {}
