@@ -17,11 +17,12 @@ export class Reservation {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Field(() => ID)
+    @Field(() => Int)
     @Column({ name: 'user_id' })
     user_id: number;
+    
 
-    @Field(() => ID)
+    @Field(() => Int)
     @Column({ name: 'room_id' })
     room_id: number;
 

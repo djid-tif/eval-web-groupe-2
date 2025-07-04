@@ -17,7 +17,7 @@ export class Notification {
     message: string;
 
     @Column({ type: 'varchar', length: 50 })
-    type: string; // 'created', 'updated', 'cancelled', etc.
+    type: string;
 
     @CreateDateColumn({ type: 'timestamp' })
     created_at: Date;

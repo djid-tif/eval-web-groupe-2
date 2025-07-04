@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { Reservation } from '../reservation/reservation.entity';
 import * as path from 'path';
 import * as fs from 'fs';
 import { createObjectCsvWriter } from 'csv-writer';
@@ -12,6 +13,8 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
+        @InjectRepository(Reservation)
+        private readonly reservationRepository: Repository<Reservation>,
     ) {}
 
     async findAll(skip = 0, limit = 10): Promise<User[]> {
@@ -45,6 +48,12 @@ export class UserService {
         const user = await this.findOne(id);
         if (!user) throw new NotFoundException('User not found');
 
+        const reservations = await this.reservationRepository.find({
+            where: { user_id: id },
+            relations: ['room'],
+            order: { created_at: 'DESC' },
+        });
+
         const filename = `user_${id}_reservations.csv`;
         const exportsDir = path.join(__dirname, '../../../exports');
         const filePath = path.join(exportsDir, filename);
@@ -56,17 +65,25 @@ export class UserService {
         const csvWriter = createObjectCsvWriter({
             path: filePath,
             header: [
-                { id: 'id', title: 'ID' },
-                { id: 'keycloak_id', title: 'Keycloak ID' },
-                { id: 'email', title: 'Email' },
-                { id: 'username', title: 'Username' },
-                { id: 'firstName', title: 'First Name' },
-                { id: 'lastName', title: 'Last Name' },
-                { id: 'created_at', title: 'Created At' },
+                { id: 'reservationId', title: 'reservationId' },
+                { id: 'userId', title: 'userId' },
+                { id: 'roomId', title: 'roomId' },
+                { id: 'startTime', title: 'startTime' },
+                { id: 'endTime', title: 'endTime' },
+                { id: 'status', title: 'status' },
             ],
         });
 
-        await csvWriter.writeRecords([user]);
+        const csvData = reservations.map(reservation => ({
+            reservationId: reservation.id,
+            userId: reservation.user_id,
+            roomId: reservation.room_id,
+            startTime: reservation.start_time.toISOString(),
+            endTime: reservation.end_time.toISOString(),
+            status: reservation.status,
+        }));
+
+        await csvWriter.writeRecords(csvData);
         
         return `http://localhost:3000/exports/${filename}`;
     }

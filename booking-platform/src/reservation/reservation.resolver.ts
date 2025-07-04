@@ -5,6 +5,7 @@ import { UserService } from '../user/user.service';
 import { RoomService } from '../room/room.service';
 import { JwtAuthGuard } from "../auth/auth.guard";
 import { UseGuards } from "@nestjs/common";
+import { NotFoundException } from '@nestjs/common';
 
 @Resolver(() => Reservation)
 export class ReservationResolver {
@@ -24,16 +25,23 @@ export class ReservationResolver {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Query(() => Reservation)
-    async reservation(@Args('id', { type: () => ID }) id: number): Promise<Reservation> {
-        return this.reservationService.findOne(id);
+    @Query(() => Reservation, { nullable: true })
+    async reservation(@Args('id', { type: () => ID }) id: number): Promise<Reservation | null> {
+        try {
+            return await this.reservationService.findOne(id);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                return null;
+            }
+            throw error;
+        }
     }
 
     @UseGuards(JwtAuthGuard)
     @Mutation(() => Reservation)
     async createReservation(
-        @Args('user_id', { type: () => ID }) user_id: number,
-        @Args('room_id', { type: () => ID }) room_id: number,
+        @Args('user_id', { type: () => Int }) user_id: number,
+        @Args('room_id', { type: () => Int }) room_id: number,
         @Args('start_time', { type: () => Date }) start_time: Date,
         @Args('end_time', { type: () => Date }) end_time: Date,
     ): Promise<Reservation> {

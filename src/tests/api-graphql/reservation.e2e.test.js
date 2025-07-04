@@ -16,7 +16,7 @@ describe('Reservations E2E Tests', () => {
     beforeAll(async () => {
         token = getUsrToken();
 
-        // 1. Créer une salle via l’API REST
+        // 1. Créer une salle via l'API REST
         const roomRes = await createRoom({
             base_url: API_REST_URL,
             room: {
@@ -31,7 +31,7 @@ describe('Reservations E2E Tests', () => {
         console.log(createdRoomId);
         console.log("API_REST_URL: ", API_REST_URL);
 
-        // 2. Récupérer un user existant via l’API REST
+        // 2. Récupérer un user existant via l'API REST
         const responseUsers = await axios.get(`${API_REST_URL}/api/users`, {
             headers: { Authorization: `Bearer ${token}` },
         });
@@ -46,7 +46,7 @@ describe('Reservations E2E Tests', () => {
         console.log(`Using room ID: ${createdRoomId} for user ID: ${userId}`);
 
         const mutation = `
-      mutation CreateReservation($user_id: ID!, $room_id: ID!, $start_time: DateTime!, $end_time: DateTime!) {
+      mutation CreateReservation($user_id: Int!, $room_id: Int!, $start_time: DateTime!, $end_time: DateTime!) {
         createReservation(user_id: $user_id, room_id: $room_id, start_time: $start_time, end_time: $end_time) {
           id
           user_id
