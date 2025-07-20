@@ -10,7 +10,7 @@ const pool = new Pool({
     database: process.env.DB_NAME || 'pgdb',
     user: process.env.DB_USER || 'pguser',
     password: process.env.DB_PASS || 'pgpass',
-    port: Number(process.env.DB_PORT) || 5432,
+    port: Number(process.env.DB_PORT) || 5436,
 });
 
 // Configuration Keycloak Admin

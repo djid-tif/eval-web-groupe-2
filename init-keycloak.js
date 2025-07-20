@@ -4,15 +4,15 @@ const KcAdminClient = require('keycloak-admin').default;
 (async () => {
     const kcAdminClient = new KcAdminClient();
 
-    // Variables that might change
-    const KEYCLOAK_URL = 'http://localhost:8080';
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'admin';
-    const REALM_NAME = 'myrealm';
-    const CLIENT_ID = 'myclient';
-    const CLIENT_SECRET = 'mysecret';
-    const REDIRECT_URI = 'http://localhost:3000/callback';
-    const LOGOUT_REDIRECT_URI = 'http://localhost:3000/';
+    // Variables from environment or defaults
+    const KEYCLOAK_URL = process.env.KEYCLOAK_URL || 'http://localhost:8080';
+    const ADMIN_USERNAME = process.env.KEYCLOAK_ADMIN_USERNAME || 'admin';
+    const ADMIN_PASSWORD = process.env.KEYCLOAK_ADMIN_PASSWORD || 'admin';
+    const REALM_NAME = process.env.KEYCLOAK_REALM || 'myrealm';
+    const CLIENT_ID = process.env.KEYCLOAK_CLIENT_ID || 'myclient';
+    const CLIENT_SECRET = process.env.KEYCLOAK_CLIENT_SECRET || 'mysecret';
+    const REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:3000/callback';
+    const LOGOUT_REDIRECT_URI = process.env.LOGOUT_REDIRECT_URI || 'http://localhost:3000/';
 
     const users = [
         {

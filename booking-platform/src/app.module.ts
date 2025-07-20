@@ -12,23 +12,22 @@ import { NotificationModule } from './notification/notification.module';
 import { JwtStrategy } from './auth/jwt-strategy';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import {User} from "./user/user.entity";
-<<<<<<< HEAD
 import { Notification } from './notification/notification.entity';
-=======
+import { Room } from './room/room.entity';
+import { Reservation } from './reservation/reservation.entity';
 import {ExtractsModule} from "./extract/extract.module";
 import {MinioModule} from "./minio/minio.module";
->>>>>>> origin/main
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'pguser',
-      password: 'pgpass',
-      database: 'pgdb',
-      entities: [User, Notification],
+      host: process.env.POSTGRES_HOST || 'localhost',
+      port: parseInt(process.env.POSTGRES_PORT || '5432'),
+      username: process.env.POSTGRES_USER || 'pguser',
+      password: process.env.POSTGRES_PASSWORD || 'pgpass',
+      database: process.env.POSTGRES_DB || 'pgdb',
+      entities: [User, Notification, Room, Reservation],
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -42,12 +41,9 @@ import {MinioModule} from "./minio/minio.module";
     ReservationModule,
     UserModule,
     AuthModule,
-<<<<<<< HEAD
     NotificationModule,
-=======
     ExtractsModule,
     MinioModule,
->>>>>>> origin/main
   ],
   providers: [
     JwtStrategy,

@@ -21,10 +21,11 @@ services:
     ports:
     - "8080:8080"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/realms/master || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
   minio:
     image: minio/minio
     environment:
@@ -57,15 +58,39 @@ services:
       KEYCLOAK_CLIENT_ID: myclient
       NODE_ENV: production
     depends_on:
-      db:
-        condition: service_healthy
-      keycloak:
-        condition: service_healthy
+      - db
+      - keycloak
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/users || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
+
+  # Keycloak initialization service
+  keycloak-init:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./init-keycloak.js:/app/init-keycloak.js
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+    command: sh -c "npm install keycloak-admin && sleep 30 && node init-keycloak.js"
+    depends_on:
+      - keycloak
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_ADMIN_USERNAME: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_REALM: myrealm
+      KEYCLOAK_CLIENT_ID: myclient
+      KEYCLOAK_CLIENT_SECRET: ""
+      REDIRECT_URI: http://localhost:3000/callback
+      LOGOUT_REDIRECT_URI: http://localhost:3000/
+    restart: "no"
+    profiles:
+      - init
 
   # gRPC Service
   grpc-server:
@@ -81,12 +106,12 @@ services:
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: pgpass
     depends_on:
-      db:
-        condition: service_healthy
-      api:
-        condition: service_healthy
+      - db
+      - api
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 50051 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
