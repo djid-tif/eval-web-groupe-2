@@ -2,11 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
-<<<<<<< HEAD
 import { NestExpressApplication } from '@nestjs/platform-express';
-=======
-import {MicroserviceOptions, Transport} from "@nestjs/microservices";
->>>>>>> origin/main
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 
 dotenv.config();
@@ -38,8 +35,6 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-
   await app.listen(3000);
 }
 bootstrap();
-
